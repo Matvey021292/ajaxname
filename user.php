@@ -18,8 +18,9 @@
 				var_dump("INSERT INTO `users`(`login`, `password`, `name`, `age`) VALUES ('$this->login','$this->password','$this->name','$this->age')");
 				return $db->insert("INSERT INTO `users`(`login`, `password`, `name`, `age`) VALUES ('$this->login','$this->password','$this->name','$this->age')");
 		}
-		public function validate(){
-		
+		static function validate($login){
+				$db = new DB();
+				return $db->findAll("SELECT `id` FROM `users` WHERE `login` = '$login';")->num_rows;
 		}
 	
 	}

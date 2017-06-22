@@ -13,9 +13,9 @@
  			}
 
 
- 			public function findAll(){
- 				$query = $this->link->query($sql);
- 				return $query->fetch_all(MYSQLI_ASSOC);
+ 			public function findAll($sql){
+ 				return $this->link->query($sql);
+ 				// return $query->fetch_all(MYSQLI_ASSOC);
  			}
  			public function insert($sql){
  				return $this->link->query($sql);

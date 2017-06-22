@@ -23,6 +23,23 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
+
+            <style type="text/css">
+                .errorMessage{
+                    color: red;
+                    text-align: center;
+                    display: none;
+                }
+               
+                .noterrorMessage{
+                    color: blue;
+                    display: none;
+                    text-align: center;
+                }
+                 .block{
+                    display: block;
+                }
+            </style>
 </head>
 <body>
 <div class="container">
@@ -42,16 +59,19 @@
                     <div class="form-wrapper">
                         <div class="row form-group">
                             <div class="col-md-12">
-                                <div class="input-group">
+                                <div class="input-group" id="emailGroup">
                                     <span class="input-group-addon " id="sizing-addon2">@</span>
                                     <input id="email" type="email" name="login" class="form-control" placeholder="Enter your email" aria-describedby="sizing-addon2">
+                                    
                                 </div>
+                                <div class="errorMessage">Имя уже занято</div>
+                                <div class="noterrorMessage">Имя свободно</div>
                             </div>
                         </div>
                         <div class="row form-group">
                             <div class="col-md-12">
                                 <div class="input-group">
-                                    <span class="input-group-addon " id="sizing-addon2"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></span>
+                                    <span class="input-group-addon " id="sizing-addon3"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></span>
                                     <input id="password" type="password" name="password" class="form-control" placeholder="Enter your password" aria-describedby="sizing-addon2">
                                 </div>
                             </div>
@@ -59,13 +79,13 @@
                         <div class="row form-group">
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <span class="input-group-addon " id="sizing-addon2"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></span>
+                                    <span class="input-group-addon " id="sizing-addon4"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></span>
                                     <input id="name" type="text" name="name" class="form-control" placeholder="Enter your name" aria-describedby="sizing-addon2">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="input-group">
-                                    <span class="input-group-addon " id="sizing-addon2"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></span>
+                                    <span class="input-group-addon " id="sizing-addon5"><span class="glyphicon glyphicon-ok-sign" aria-hidden="true"></span></span>
                                     <input type="text" name="age" class="form-control" placeholder="Enter your age" aria-describedby="sizing-addon2">
                                 </div>
                             </div>
@@ -79,7 +99,58 @@
             </form>
         </div>
     </div>
+    <script type="text/javascript">
+        
+        $(document).ready(function () {
+            var time;
+            $('input[name=login]').keyup(function(e){
+                clearTimeout(time);
+                var login = $(this).val();
+                time = setTimeout(function(){
+                    validateLogin(login);},2000);
+                });
 
+
+                function validateLogin(login){
+                var values = $(this).serialize();
+
+
+                $.ajax({
+                    url: "validate.php",
+                    type: "post",
+                    data: {'login':login} ,
+                    success: function (response) {
+                        if(response != 0){
+                            $('.noterrorMessage').removeClass("block");
+                            $('.errorMessage').addClass("block");
+                            $('#email').css({'background-color': 'rgba(255, 0, 0, 0.25)'}
+                                );
+                            $('#sizing-addon2').css({'background-color': 'rgba(255, 0, 0, 0.25)'}
+                                );
+                            $('#emailGroup').css({'border':'3px solid red','border-radius': '6px'});
+
+                        }
+                        if(response == 0){
+                            $('.errorMessage').removeClass("block");
+                            $('.noterrorMessage').addClass("block");
+                            $('#email').css({'background-color': 'rgba(0, 128, 255, 0.13)'}
+                                );
+                            $('#sizing-addon2').css({'background-color': 'rgba(0, 128, 255, 0.13)'}
+                                );
+                            $('#emailGroup').css({'border':'3px solid blue','border-radius': '6px'});
+                        }
+
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                    }
+
+
+                });
+
+            }
+        });
+    </script>
 
 
 </div>

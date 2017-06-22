@@ -14,5 +14,6 @@
 	$user = new User($login,$password,$name,$age);
 
 	$result = $user ->register();
+	$result = $user ->validate();
 	var_dump($result);
 ?>
